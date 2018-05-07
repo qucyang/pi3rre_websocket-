@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>websocket</title>
+</head>
+<body>
+    <h1>hello , Pi3rre</h1>
+    <input type="text" />
+    <button>提交</button>
+    <div id="app"></div>
+    <script>
+        let url = "ws://localhost:3001/";
+        let oText = document.querySelector('#app');
+        let oInput = document.querySelector('input');
+        let oBtn = document.querySelector('button');
+        
+        const websocket = new WebSocket(url);
+        websocket.onopen = () => {
+            console.log('websocket open');
+            oText.innerHTML = "connected";
+        }
+        websocket.onclose = () => {
+            console.log('websocket close');
+        }
+        websocket.onmessage = (e) => {
+            console.log(e);
+            oText.innerHTML = e.data;
+        }
+
+        oBtn.onclick = () => {
+            websocket.send(oInput.value);
+            oInput.value = '';
+        }
+    </script>
+</body>
+</html>
