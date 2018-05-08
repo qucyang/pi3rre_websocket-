@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>websocket</title>
+</head>
+<body>
+    <h1>聊天室</h1>
+    <input type="text" />
+    <button>发送</button>
+    <ul id="app"></ul>
+    <script>
+        let url = "ws://localhost:3006/";
+        let oUl = document.querySelector('#app');
+        let oInput = document.querySelector('input');
+        let oBtn = document.querySelector('button');
+        
+        const websocket = new WebSocket(url);
+
+        function showMessage(data) {
+            let li = document.createElement('li');
+            var input= '';
+            if(data.type === 'enter') {
+                input = data.name + data.msg;
+                li.style.color = 'blue';
+            } else if(data.type === 'message'){
+                input = data.name + ": " +data.msg;
+                li.style.color = 'black';
+            } else if(data.type === 'leave') {
+                input = data.name + data.msg;
+                li.style.color = 'red';
+            }
+            li.innerHTML = input;
+            oUl.appendChild(li);
+        }
+        
+        // 开启
+        websocket.onopen = () => {
+            console.log('websocket open');
+            oBtn.onclick = () => {
+                let txt = oInput.value;
+                if(txt) {
+                    websocket.send(txt);
+                    oInput.value = '';
+                }
+                
+            }
+        }
+
+        // 关闭
+        websocket.onclose = () => {
+            console.log('websocket close');
+        }
+
+        // 得到数据
+        websocket.onmessage = (e) => {
+            var data = JSON.parse(e.data)
+            showMessage(data);
+        }
+
+        
+    </script>
+</body>
+</html>

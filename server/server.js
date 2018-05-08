@@ -1,5 +1,5 @@
 let ws = require('nodejs-websocket');
-let PORT = 3001;
+let PORT = 3000;
 const server = ws.createServer((conn) => {
     console.log("New connection");
     conn.on("text", (str) => {

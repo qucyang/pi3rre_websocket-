@@ -9,7 +9,9 @@
   },
   "devDependencies": {},
   "scripts": {
-    "devServer": "node server.js",
+    "devServer1": "node ./server/server.js",
+    "devServer2": "node ./server/server2.js",
+    "devServer3": "node ./server/server3.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },

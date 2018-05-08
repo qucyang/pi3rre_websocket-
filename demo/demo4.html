@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>websocket</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
+</head>
+<body>
+    <h1>聊天室</h1>
+    <input type="text" />
+    <button>发送</button>
+    <ul id="app"></ul>
+    <script>
+        let url = "ws://localhost:3008/";
+        let oUl = document.querySelector('#app');
+        let oInput = document.querySelector('input');
+        let oBtn = document.querySelector('button');
+        
+        const websocket = io(url);
+
+        function showMessage(data, type) {
+            let li = document.createElement('li');
+            var input= '';
+            if(type === 'enter') {
+                input = data;
+                li.style.color = 'blue';
+            } else if(type === 'message'){
+                input = data;
+                li.style.color = 'black';
+            } else if(type === 'leave') {
+                input = data;
+                li.style.color = 'red';
+            }
+            li.innerHTML = input;
+            oUl.appendChild(li);
+        }
+        
+        oBtn.onclick = () => {
+            let txt = oInput.value;
+            if(txt) {
+                websocket.emit('msg', txt);
+                oInput.value = '';
+            }
+            
+        }
+        
+        websocket.emit('enter', (data) => {
+            showMessage(data, 'enter')
+        });
+        websocket.emit('message', (data) => {
+            showMessage(data, 'message')
+        })
+        websocket.emit('leave', (data) => {
+            showMessage(data, 'leave')
+        })
+
+        
+    </script>
+</body>
+</html>
